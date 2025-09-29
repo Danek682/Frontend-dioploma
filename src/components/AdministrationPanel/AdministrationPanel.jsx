@@ -1,16 +1,16 @@
-import {  useEffect, useState } from "react"
+import {  use, useEffect, useState } from "react"
 import {  Link } from "react-router-dom";
 import "./administrationPanel.css"
 import axios from "axios";
 
 export function AdministrationPanel () {
-    const [hallActive, setHallAitive] = useState("hallManagment__content_default") 
+    const [hallActive, setHallAitive] = useState("hallManagment__content_default")  //выбранный зал
     const [rowImagehallManagment, setRowImagehallManagment] = useState("/arrow.png")
-    const [hall, setHalls] = useState([])
+    const [hall, setHalls] = useState([]) //Залы
     
     function onClickHallManagment () {
         if (hallActive === "hallManagment__content_default") {
-            setHallAitive("hallManagment__conten")
+            setHallAitive("hallManagment__content")
             setRowImagehallManagment("/arrowUp.png")
         } else {
             setHallAitive("hallManagment__content_default")
@@ -34,8 +34,8 @@ export function AdministrationPanel () {
         ))
     }
 
-    const [hallConfigure, setHallConfigure] = useState("hallConfigure__content-default")
-    const [rowImageHallConfigure, setRowImageHallConfigure] = useState("/arrow.png")
+    const [hallConfigure, setHallConfigure] = useState("hallConfigure__content-default") //блок с конфигурацией залов
+    const [rowImageHallConfigure, setRowImageHallConfigure] = useState("/arrow.png") //стрелка для переключения
 
     function onClickHallConfigure () {
         if (hallConfigure === "hallConfigure__content-default") {
@@ -47,58 +47,73 @@ export function AdministrationPanel () {
         }
     }
         function showHallPlaces (place, rowIndex, placeIndex) {
+            const massiveCopy = hallConfig.map(row => [...row])
             if (place === "standart") {
                 return <span key={placeIndex} className="places__classes-standartPlace-button" onClick={() => {
-                    const massiveCopy = hallConfig.map(row => [...row])
                     massiveCopy[rowIndex][placeIndex] = "vip"
                     setHallConfig(massiveCopy)
                 }}></span>
             } 
             if (place === "vip") {
                 return <span key={placeIndex} className="places__classes-vipPlace-button" onClick={() => {
-                    const massiveCopy = hallConfig.map(row => [...row])
                     massiveCopy[rowIndex][placeIndex]= ""
                     setHallConfig(massiveCopy)
                 }}></span>
             }
             if (place === "") {
                 return <span key={placeIndex} className="places__classes-blockedPlace-button" onClick={() => {
-                    const massiveCopy = hallConfig.map(row => [...row])
                     massiveCopy[rowIndex][placeIndex]= "standart"
                     setHallConfig(massiveCopy)
                 }}></span>
             }
         }
 
-    const [activeHall, setActiveHall] = useState(null)
-    const [rowCount, setRowCount] = useState("");
-    const [placeCount, setPlaceCount] = useState("");
-    const [hallConfig, setHallConfig] = useState([])
+    const [activeHall, setActiveHall] = useState(null) //Выбранный зал
+    const [rowCount, setRowCount] = useState(""); //input с рядами
+    const [placeCount, setPlaceCount] = useState(""); //input с местами
+    const [hallConfig, setHallConfig] = useState([]) //конфигурация зала
 
-    useEffect(() => {
-        for (let i = 0; i < hallConfig.length; i++) {
-            let innerHallConfig = hallConfig[i].length
-            for (let j = 0; j < innerHallConfig; j++) {
-                setHallConfig(
-                new Array(Number(rowCount))
-                .fill(hallConfig[i])
-                .map(() => new Array(Number(placeCount)).fill(hallConfig[i][j]))
-            )
-            }
-        }
-
-            }, [rowCount, placeCount])
-
-     useEffect(() => {
-        if (activeHall) {
-            let selectedHall = hall.find(h => h.id === activeHall)
+    useEffect(()=> {
+    if (activeHall) {
+            let selectedHall = hall.find((h)=> h.id === activeHall) 
             if (selectedHall) {
-            setHallConfig(selectedHall.hall_config)
-            setRowCount(selectedHall.hall_rows)
-            setPlaceCount(selectedHall.hall_places)
+                setHallConfig(selectedHall.hall_config)
+                setRowCount(selectedHall.hall_rows)
+                setPlaceCount(selectedHall.hall_places)
             }
         }
-    }, [activeHall])
+    },[activeHall, hall]) // отображение конфигурации зала
+
+  useEffect (()=> {
+    if (!rowCount || !placeCount){
+        return
+    } 
+        let newHallMatrix = []
+        for (let i = 0; i < rowCount; i++) {
+            newHallMatrix[i] = []
+            for (let j = 0; j < placeCount; j++) {
+                if (hallConfig[i] && hallConfig[i][j] ) {
+                    newHallMatrix[i][j] = hallConfig[i][j]
+                } else {
+                    newHallMatrix[i][j] = "standart"
+                }
+            }
+        }
+        setHallConfig(newHallMatrix)
+  },[rowCount,placeCount]) //изменение конфигурации зала    
+
+   function CheckValueInput (value) {
+        if(!/^\d*\.?\d*$/.test(value)) {
+            return ""
+        }
+        if (value.length > 2) {
+            return value.slice(0,2)
+        }
+        if (value >= 20) {
+            return 19
+        }
+        return value
+    } //Проверка значений input
 
     return (
         <div className="adminPanel">
@@ -123,7 +138,7 @@ export function AdministrationPanel () {
                         <div className="hallManagment__content_hall">
                             {hall.map(h=> (
                                     <span className="hall" key={h.hall_name}>- {h.hall_name} 
-                                    <button className="bashButton" onClick={ () => {
+                                    <button className="bashButton" onClick={() => {
                                         deleteHall(h.id) }}> 
                                         <img className="bashImage" src="/bash.png" alt="Удалить"/>
                                     </button> 
@@ -169,9 +184,8 @@ export function AdministrationPanel () {
                                                 'Content-Type': 'multipart/form-data',
                                             },
                                         }).then((response => {
-                                            setRowCount("");
-                                            setPlaceCount("")
-                                            console.log(response.data)}
+                                            console.log(response.data)
+                                        }
                                             
                                         )).catch(error => {
                                             console.log(error)
@@ -182,12 +196,12 @@ export function AdministrationPanel () {
                                             <div className="hallConfiguration__form-rows">
                                              <label htmlFor="rowsInput" className="hallConfiguration__form-rows-label">Рядов, шт</label>
                                              <input key={h.hall_rows} type="text" name="hall_rows" id="rowsInput" className="hallConfiguration__form-rows-input" value={rowCount} 
-                                             onChange={(e)=> {setRowCount(e.target.value)}}/>
+                                             onChange={(e)=> {setRowCount(CheckValueInput(e.target.value))}}/>
                                         </div>
                                           <span className="hallConfiguration__form_x">X</span>
                                         <div className="hallConfiguration__form-places">
                                             <label htmlFor="placesInput" className="hallConfiguration__form-places-label">Мест, шт</label>
-                                            <input key={h.hall_places} type="text" name="hall_places" id="placesInput" className="hallConfiguration__form-places-input" value={placeCount} onChange={(e)=> {setPlaceCount(e.target.value)}}/>
+                                            <input key={h.hall_places} type="text" name="hall_places" id="placesInput" className="hallConfiguration__form-places-input" value={placeCount} onChange={(e)=> {setPlaceCount(CheckValueInput(e.target.value))}}/>
                                         </div>
                                         </div>
                                         <span className="conf-step__paragraph">Теперь вы можете указать типы кресел на схеме зала:</span>
@@ -216,7 +230,12 @@ export function AdministrationPanel () {
                                               ))}   
                                             </div>
                                         </div>
-                                        <button>send</button>
+                                        <div className="fieldset">
+                                            <button className="fieldset__cancel-button" onClick={() => {
+                                                setActiveHall("hallConfigure__content_hall")
+                                            }} >Отмена</button>
+                                            <button className="fieldset__send-button" >Сохранить</button>
+                                        </div>
                                     </form>
                                     
                                     : ""}

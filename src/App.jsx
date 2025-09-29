@@ -11,8 +11,7 @@ import axios from "axios";
  function App() {
   useEffect(()=>{
         axios.get("https://shfe-diplom.neto-server.ru/alldata").then(response => {
-            const info = response.data
-            console.log(info)
+            console.log(response.data)
         }).catch(err => (console.log(err)))
     },[]) 
   return (
