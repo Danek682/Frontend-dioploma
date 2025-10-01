@@ -1,3 +1,31 @@
+@keyframes fadeDown {
+   0% {
+       max-height: 0;
+       opacity: 0;
+   }
+   80% {
+       max-height: 5000px;
+   }
+   100% {
+       opacity: 1;
+   }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  20% {
+    max-height: 5000px;
+  }
+  100% {
+    max-height: 0;
+    opacity: 0;
+    display: none;
+   }
+}
+
+
 .adminPanel {
 position: relative;
 background-image: url("/public/backgroungImage.jpg");
@@ -8,6 +36,7 @@ background-size: cover;
 box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.5);
 background-color: #3d3939;
 z-index: 0;
+background-attachment: fixed;
 }
 
 .header__adminPanel{
@@ -95,13 +124,16 @@ cursor: pointer;
 }
 
 .hallManagment__content_default {
-  display: none;
+  animation: fadeOut 0.3s cubic-bezier(0,.7,1,.99) forwards;
+  background: rgb(231, 230, 230); 
+  
 }
 
 .hallManagment__content{
-  display: flex;
-  flex-direction: column;
-  background: rgb(231, 230, 230);
+display: flex;
+flex-direction: column;
+background: rgb(231, 230, 230); 
+animation: fadeDown 1s ease 
 }
 
 .hallManagment__content_span {
@@ -246,13 +278,19 @@ text-align: left;
 }
 
 .hallConfigure__content-default {
-  display: none;
+  animation: fadeOut 0.3s cubic-bezier(0,.7,1,.99) forwards;
+  background: rgb(231, 230, 230);
 }
 
 .hallConfigure__content {
   display: flex;
   flex-direction: column;
-  background: rgb(231, 230, 230)
+  background: rgb(231, 230, 230);
+  animation: fadeDown 1s ease 
+}
+
+.hallConfigure__content_wapper {
+  padding: 35px 0px 0px 105px;
 }
 
 .hallConfigure__content_span {
@@ -261,9 +299,7 @@ font-family: 'Roboto', sans-serif;
 font-size: 16px;
 font-weight: 400;
 line-height: 18px;
-letter-spacing: 0%;
 text-align: left;
-padding: 35px 0px 0px 105px;
 }
 
 .hallConfigure__content_halls {

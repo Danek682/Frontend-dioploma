@@ -2,18 +2,22 @@ import {  use, useEffect, useState } from "react"
 import {  Link } from "react-router-dom";
 import "./administrationPanel.css"
 import axios from "axios";
+// import 'animate.css';
 
 export function AdministrationPanel () {
     const [hallActive, setHallAitive] = useState("hallManagment__content_default")  //выбранный зал
+    // const [animation, setAnimation] = useState ("")
     const [rowImagehallManagment, setRowImagehallManagment] = useState("/arrow.png")
     const [hall, setHalls] = useState([]) //Залы
     
     function onClickHallManagment () {
         if (hallActive === "hallManagment__content_default") {
             setHallAitive("hallManagment__content")
+            //  setAnimation("animate__animated animate__fadeInDown")
             setRowImagehallManagment("/arrowUp.png")
         } else {
             setHallAitive("hallManagment__content_default")
+            // setAnimation("animate__animated animate__fadeOutUp")
             setRowImagehallManagment("/arrow.png")
         }
     }
@@ -56,11 +60,11 @@ export function AdministrationPanel () {
             } 
             if (place === "vip") {
                 return <span key={placeIndex} className="places__classes-vipPlace-button" onClick={() => {
-                    massiveCopy[rowIndex][placeIndex]= ""
+                    massiveCopy[rowIndex][placeIndex]= "disabled"
                     setHallConfig(massiveCopy)
                 }}></span>
             }
-            if (place === "") {
+            if (place === "disabled") {
                 return <span key={placeIndex} className="places__classes-blockedPlace-button" onClick={() => {
                     massiveCopy[rowIndex][placeIndex]= "standart"
                     setHallConfig(massiveCopy)
@@ -133,20 +137,22 @@ export function AdministrationPanel () {
                                 <img src={rowImagehallManagment} alt="Стрелка" className="arrow"/>
                         </button>
                     </div>
-                    <div className={hallActive}>
-                        <span className="hallManagment__content_span">Доступные залы:</span>
-                        <div className="hallManagment__content_hall">
-                            {hall.map(h=> (
-                                    <span className="hall" key={h.hall_name}>- {h.hall_name} 
-                                    <button className="bashButton" onClick={() => {
-                                        deleteHall(h.id) }}> 
-                                        <img className="bashImage" src="/bash.png" alt="Удалить"/>
-                                    </button> 
-                                </span>
-                            ))}
-                        </div>                        
-                    <Link to="/admin/hallAdd"><button className="hallAdd__button">Создать зал</button></Link>
-                    </div>
+                        <div className= {`${hallActive}`}>
+                            <div style={{minHeight: 0}}>
+                                <span className="hallManagment__content_span">Доступные залы:</span>
+                            <div className="hallManagment__content_hall">
+                                {hall.map(h=> (
+                                        <span className="hall" key={h.hall_name}>- {h.hall_name} 
+                                        <button className="bashButton" onClick={() => {
+                                            deleteHall(h.id) }}> 
+                                            <img className="bashImage" src="/bash.png" alt="Удалить"/>
+                                        </button> 
+                                    </span>
+                                ))}
+                            </div>                        
+                        <Link to="/admin/hallAdd"><button className="hallAdd__button">Создать зал</button></Link>
+                            </div>
+                        </div>
                 </div>
                 <div className="hallConfigure">
                     <div className="hallConfigure__header">
@@ -156,7 +162,9 @@ export function AdministrationPanel () {
                         </button>
                     </div>
                   <div className={hallConfigure}>
-                    <span className="hallConfigure__content_span">Выберите зал для конфигурации:</span>
+                    <div className="hallConfigure__content_wapper">
+                        <span className="hallConfigure__content_span">Выберите зал для конфигурации:</span>
+                    </div>
                     <div className="hallConfigure__content_halls">
                             {hall.map((h,index)=> (
                                 <button key={index} onClick={() => {setActiveHall(h.id)}}
@@ -245,6 +253,7 @@ export function AdministrationPanel () {
                     </div>
                   </div>
                 </div>
+                <div></div>
             </main>
         </div>
     )
