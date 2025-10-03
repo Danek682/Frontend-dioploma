@@ -79,7 +79,8 @@ background: rgba(255, 255, 255, 1);
 margin: 0 auto;
 }
 
-.hallManagment__header {
+.hallManagment__header,
+.configurePrice__header {
 width: 962px;
 height: 95px;
 display: flex;
@@ -90,9 +91,10 @@ margin: 0 auto;
 background: rgba(99, 83, 108, 1);
 }
 
-.hallManagment__heading {
+.hallManagment__heading,
+.configurePrice__heading {
 color: rgba(255, 255, 255, 1);
-  font-family: 'Roboto', sans-serif;
+font-family: 'Roboto', sans-serif;
 font-size: 22px;
 font-weight: 700;
 line-height: 25px;
@@ -123,13 +125,14 @@ cursor: pointer;
   transform: scale(1.07);
 }
 
-.hallManagment__content_default {
+.hallManagment__content_default,
+.configurePrice__main-default {
   animation: fadeOut 0.3s cubic-bezier(0,.7,1,.99) forwards;
   background: rgb(231, 230, 230); 
-  
 }
 
-.hallManagment__content{
+.hallManagment__content,
+.configurePrice__main {
 display: flex;
 flex-direction: column;
 background: rgb(231, 230, 230); 

@@ -2,26 +2,49 @@ import {  use, useEffect, useState } from "react"
 import {  Link } from "react-router-dom";
 import "./administrationPanel.css"
 import axios from "axios";
+import { ConfigurePrice } from "../AdministrationPanel/ConfigurePrice/ConfigurePrice";
 // import 'animate.css';
 
 export function AdministrationPanel () {
-    const [hallActive, setHallAitive] = useState("hallManagment__content_default")  //выбранный зал
-    // const [animation, setAnimation] = useState ("")
+    const [hallActive, setHallActive] = useState("hallManagment__content_default")  //выбранный зал
     const [rowImagehallManagment, setRowImagehallManagment] = useState("/arrow.png")
+    const [rowImageHallConfigure, setRowImageHallConfigure] = useState("/arrow.png") //стрелка для переключения
+    const [rowImagePriceConfigure, setRowImagePriceConfigure] = useState("/arrow.png") //стрелка для переключения
     const [hall, setHalls] = useState([]) //Залы
-    
+    const [hallConfigure, setHallConfigure] = useState("hallConfigure__content-default") //блок с конфигурацией залов
+    const [priceConfigureWindow, setPriceConfigureWindow ] = useState("configurePrice__main-default")// Блок с утановкой цен залов
+
     function onClickHallManagment () {
         if (hallActive === "hallManagment__content_default") {
-            setHallAitive("hallManagment__content")
-            //  setAnimation("animate__animated animate__fadeInDown")
+            setHallActive("hallManagment__content")
             setRowImagehallManagment("/arrowUp.png")
         } else {
-            setHallAitive("hallManagment__content_default")
-            // setAnimation("animate__animated animate__fadeOutUp")
+            setHallActive("hallManagment__content_default")
             setRowImagehallManagment("/arrow.png")
         }
     }
+
+    function onClickHallConfigure () {
+        if (hallConfigure === "hallConfigure__content-default") {
+            setHallConfigure("hallConfigure__content")
+            setRowImageHallConfigure("/arrowUp.png")
+        } else {
+            setHallConfigure("hallConfigure__content-default")
+            setRowImageHallConfigure("/arrow.png")
+        }
+    }
     
+    function onClickPriceConfigure () {
+        if (priceConfigureWindow === "configurePrice__main-default") {
+            setPriceConfigureWindow("configurePrice__main")
+            setRowImagePriceConfigure("/arrowUp.png")
+        }
+        else {
+            setPriceConfigureWindow("configurePrice__main-default")
+            setRowImagePriceConfigure("/arrow.png")
+        }
+    }
+
     useEffect(()=> {
         axios.get("https://shfe-diplom.neto-server.ru/alldata").then(response => {
             setHalls(response.data.result.halls)
@@ -38,18 +61,6 @@ export function AdministrationPanel () {
         ))
     }
 
-    const [hallConfigure, setHallConfigure] = useState("hallConfigure__content-default") //блок с конфигурацией залов
-    const [rowImageHallConfigure, setRowImageHallConfigure] = useState("/arrow.png") //стрелка для переключения
-
-    function onClickHallConfigure () {
-        if (hallConfigure === "hallConfigure__content-default") {
-            setHallConfigure("hallConfigure__content")
-            setRowImageHallConfigure("/arrowUp.png")
-        } else {
-            setHallConfigure("hallConfigure__content-default")
-            setRowImageHallConfigure("/arrow.png")
-        }
-    }
         function showHallPlaces (place, rowIndex, placeIndex) {
             const massiveCopy = hallConfig.map(row => [...row])
             if (place === "standart") {
@@ -79,12 +90,14 @@ export function AdministrationPanel () {
 
     useEffect(()=> {
     if (activeHall) {
-            let selectedHall = hall.find((h)=> h.id === activeHall) 
+        axios.get("https://shfe-diplom.neto-server.ru/alldata").then(response => {
+            let selectedHall = response.data.result.halls.find((h)=> h.id === activeHall) 
             if (selectedHall) {
                 setHallConfig(selectedHall.hall_config)
                 setRowCount(selectedHall.hall_rows)
                 setPlaceCount(selectedHall.hall_places)
             }
+        })
         }
     },[activeHall, hall]) // отображение конфигурации зала
 
@@ -202,10 +215,10 @@ export function AdministrationPanel () {
                                      <span className="hallConfiguration__conf-step__paragpaph">Укажите количество рядов и максимальное количество кресел в ряду:</span>
                                         <div className="hallConfiguration__inputs">
                                             <div className="hallConfiguration__form-rows">
-                                             <label htmlFor="rowsInput" className="hallConfiguration__form-rows-label">Рядов, шт</label>
-                                             <input key={h.hall_rows} type="text" name="hall_rows" id="rowsInput" className="hallConfiguration__form-rows-input" value={rowCount} 
-                                             onChange={(e)=> {setRowCount(CheckValueInput(e.target.value))}}/>
-                                        </div>
+                                                <label htmlFor="rowsInput" className="hallConfiguration__form-rows-label">Рядов, шт</label>
+                                                <input key={h.hall_rows} type="text" name="hall_rows" id="rowsInput" className="hallConfiguration__form-rows-input" value={rowCount} 
+                                                onChange={(e)=> {setRowCount(CheckValueInput(e.target.value))}}/>
+                                            </div>
                                           <span className="hallConfiguration__form_x">X</span>
                                         <div className="hallConfiguration__form-places">
                                             <label htmlFor="placesInput" className="hallConfiguration__form-places-label">Мест, шт</label>
@@ -240,7 +253,9 @@ export function AdministrationPanel () {
                                         </div>
                                         <div className="fieldset">
                                             <button className="fieldset__cancel-button" onClick={() => {
-                                                setActiveHall("hallConfigure__content_hall")
+                                                setActiveHall(null)
+                                                setRowCount("")
+                                                setPlaceCount("")
                                             }} >Отмена</button>
                                             <button className="fieldset__send-button" >Сохранить</button>
                                         </div>
@@ -252,8 +267,19 @@ export function AdministrationPanel () {
                         </div>
                     </div>
                   </div>
+                <div className="configurePrice__header">
+                    <span className="configurePrice__heading">Конфигурация цен</span>
+                            <button className="rowButton" onClick={onClickPriceConfigure}>
+                                <img src={rowImagePriceConfigure} alt="Стрелка" className="arrow"/>
+                        </button>
                 </div>
-                <div></div>
+                <div className={priceConfigureWindow}>
+                    {<ConfigurePrice 
+                    hall = {hall}
+                    setHalls = {setHalls}
+                    />}
+                </div>
+                </div>
             </main>
         </div>
     )

@@ -1,0 +1,118 @@
+.configurePrice__content {
+width: 962px;
+height: auto;
+background: rgb(231, 230, 230); 
+ }
+
+ .configurePrice__content-paragraph{
+display: flex;
+color: rgba(0, 0, 0, 1);
+font-family: 'Roboto', sans-serif; 
+font-size: 16px;
+font-weight: 400;
+line-height: 18px;
+text-align: left;
+padding: 35px 0px 0px 99px;
+ }
+
+.configurePrice__content-hallsButtons{
+display: flex;
+padding: 10px 104px 20px 104px;
+gap: 2px;
+ }
+
+.configurePrice__form-paragraph {
+    display: flex;
+color: rgba(0, 0, 0, 1);
+font-family: 'Roboto', sans-serif;
+font-size: 16px;
+font-weight: 400;
+line-height: 18px;
+text-align: left;
+padding: 10px 0px 0px 104px;
+}
+
+.configurePrice__form-standart-label,
+.inputPrefix {
+color: rgba(132, 132, 132, 1);
+font-family: 'Roboto', sans-serif;
+font-size: 12px;
+font-weight: 400;
+line-height: 14px;
+letter-spacing: 0%;
+text-align: left;
+display: flex;
+}
+
+.hallPrice__content_hall {
+width: auto;
+height: 42px;
+align-items: flex-start;
+padding: 12.2px 20.25px 12.9px 21px;
+border-radius: 3px;
+box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.24),0px 0px 3px 0px rgba(0, 0, 0, 0.12);
+background: rgba(255, 255, 255, 0.45);
+border: none;
+color: rgba(0, 0, 0, 1);
+font-family: 'Roboto', sans-serif;
+font-size: 14px;
+font-weight: 500;
+line-height: 16px;
+text-align: left;
+text-transform: uppercase;
+}
+
+.hallPrice__content_hall-isActive {
+width: auto;
+height: 46px;
+justify-content: flex-start;
+align-items: flex-start;
+padding: 15.41px 23.03px 13.9px 23.1px;
+border-radius: 3px;
+box-shadow: 0px 6px 8px 0px rgba(0, 0, 0, 0.24),0px 2px 2px 0px rgba(0, 0, 0, 0.24),0px 0px 2px 0px rgba(0, 0, 0, 0.12);
+background: rgba(255, 255, 255, 1);
+color: rgba(0, 0, 0, 1);
+font-family: 'Roboto', sans-serif;
+font-size: 15px;
+font-weight: 900;
+line-height: 16px;
+text-align: left;
+text-transform: uppercase;
+border: none;
+}
+
+.configurePrice__inputs {
+padding: 10px 0px 0px 104px;
+}
+
+.configurePrice__main-none {
+    display: none;
+}
+
+/* .configurePrice__form-standart:nth-child(n+1) {
+    display: flex;
+    gap: 15px   ;
+    flex-direction: column;
+} */
+
+.configurePrice__form-standart-input-wrapper,
+.configurePrice__form-vip-input-wrapper {
+display: flex;
+align-items: center;
+gap: 3.5px ;
+}
+
+.configurePrice__form-standart-input,
+.configurePrice__form-vip-input {
+    width: 100px;
+    height: 36px;
+    padding: 8px 8.8px 9px 8.8px;
+    border: 1px solid rgba(183, 183, 183, 1);
+    background: rgba(255, 255, 255, 1);
+    color: rgba(117, 117, 117, 1);
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 100%;
+    text-align: left;
+}
